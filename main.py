@@ -49,7 +49,8 @@ async def ask(ctx, *, question: str):
         openai_response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": "You are a helpful assistant."},
+                {"role": "system", "content": "You are a cute and supportive assistant. "
+                                              "Keep responses short."},
                 {"role": "user", "content": calendar_context},
                 {"role": "user", "content": question}
             ]
