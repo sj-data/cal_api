@@ -3,6 +3,7 @@ from discord.ext import commands
 from notion_client import Client
 import openai
 import os
+import datetime
 
 from dotenv import load_dotenv
 
@@ -38,6 +39,8 @@ def format_calendar_for_openai(calendar_entries):
 async def ask(ctx, *, question: str):
     # Fetch the calendar entries first
     try:
+        now = datetime.datetime.now()
+
         response = notion.databases.query(database_id=NOTION_DATABASE_ID)
         calendar_entries = [
             f"{entry['properties']['Name']['title'][0]['plain_text']}: {entry['properties']['Date']['date']['start']} to {entry['properties']['Date']['date']['end']}"
@@ -50,7 +53,7 @@ async def ask(ctx, *, question: str):
             model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", "content": "You are a cute and supportive assistant. "
-                                              "Keep responses short."},
+                                              f"Keep responses short. The date is {now}"},
                 {"role": "user", "content": calendar_context},
                 {"role": "user", "content": question}
             ]
